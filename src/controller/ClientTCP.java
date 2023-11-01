@@ -64,7 +64,7 @@ public class ClientTCP implements AutoCloseable {
                 System.out.println("Connected to the server !");
                 
                 /* Get employee ID and send scores serialized */
-                //this.writer.println("START"); 
+                this.writer.println(""); 
                 
                 /* Get Message of server */
                 while (isConnectedToServer && isClientOpened)
@@ -177,7 +177,7 @@ public class ClientTCP implements AutoCloseable {
                 }
     
             } else {
-                //All good
+                System.out.println("all good");
             }
         }
         catch (IOException IOE) {

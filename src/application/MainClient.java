@@ -21,7 +21,7 @@ public class MainClient extends Application {
 	 */
 	public MainClient() throws IOException {
 		clientController = new ClientController();
-		client = new ClientTCP("10.188.174.139", 8070, clientController);
+		client = new ClientTCP("10.188.174.139", 8090, clientController);
 		
 		clientController.setClientTCP(client);
 		
