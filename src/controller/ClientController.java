@@ -13,10 +13,10 @@ public class ClientController{
 	private Label client, labelIPAddress,  labelPort,  labelIsConnected, valueIsConnected;
 	
 	@FXML
-	Button connect;
+	Button connect, send;
 	
 	@FXML
-	TextField valueIPAddress,valuePort;
+	TextField valueIPAddress,valuePort, message;
 
 	/**
 	 * Setter of clientTCP -> use for associating emulator and ClientTCP
