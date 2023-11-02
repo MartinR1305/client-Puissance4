@@ -15,11 +15,11 @@
       </Label>
       <TextField fx:id="valueIPAddress" layoutX="225.0" layoutY="174.0" />
       <TextField fx:id="valuePort" layoutX="226.0" layoutY="223.0" />
-      <Button fx:id="connect" layoutX="274.0" layoutY="278.0" mnemonicParsing="false" text="Connect" />
+      <Button fx:id="connect" layoutX="274.0" layoutY="278.0" mnemonicParsing="false" onAction="#changeIPandPort" text="Connect" />
       <Label layoutX="258.0" layoutY="331.0" text="State :" />
       <Label fx:id="labelPort" layoutX="128.0" layoutY="227.0" text="Port" />
       <Label fx:id="labelIPAddress" layoutX="128.0" layoutY="178.0" text="IP Address" />
-      <Label fx:id="valueIsConnected" layoutX="326.0" layoutY="331.0" text="Yes/No" />
+      <Label fx:id="valueIsConnected" layoutX="315.0" layoutY="331.0" text="Yes/No" />
       <TextField fx:id="message" layoutX="437.0" layoutY="40.0" />
       <Button fx:id="send" layoutX="490.0" layoutY="69.0" mnemonicParsing="false" text="Send" />
    </children>

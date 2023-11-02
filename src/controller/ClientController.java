@@ -42,6 +42,22 @@ public class ClientController implements Initializable{
 	public void setClientTCP(ClientTCP clientTCP) {
 		this.clientTCP = clientTCP;
 	}
+	
+	/**
+     * When Button are pressed : send new IP / port information
+     */
+    @FXML
+    private void changeIPandPort() {
+        
+        //Get Information
+        if (valueIPAddress.getText() != null && valuePort.getText() != null) {
+            clientTCP.sendIP_Port (valueIPAddress.getText(), valuePort.getText());
+        }
+        
+        //Clear
+        valueIPAddress.setText(null);
+        valuePort.setText(null);
+    }
 
 	/**
 	 * Method that allows to actualize the state of the connection between the client and the server

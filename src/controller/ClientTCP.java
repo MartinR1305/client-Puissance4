@@ -10,6 +10,8 @@ import java.util.regex.Pattern;
 
 import javax.swing.SwingUtilities;
 
+import javafx.application.Platform;
+
 public class ClientTCP implements AutoCloseable {
 
 	private Socket clientSocket;
@@ -19,6 +21,7 @@ public class ClientTCP implements AutoCloseable {
 	private ClientController clientController;
 
 	private boolean isConnectedToServer;
+	private boolean is2ndClientConnected;
 	private boolean isClientOpened;
 	private boolean isReconnectedToServerInProgress;
 
@@ -36,6 +39,7 @@ public class ClientTCP implements AutoCloseable {
 	 */
 	public ClientTCP(String IP, int port, ClientController clientController) throws IOException {
 		this.isConnectedToServer = false;
+		this.is2ndClientConnected = false;
 		this.isClientOpened = true;
 		this.isReconnectedToServerInProgress = false;
 
@@ -45,7 +49,7 @@ public class ClientTCP implements AutoCloseable {
 		this.IP = IP;
 		this.clientController = clientController;
 	}
-	
+
 	/**
 	 * Getter for the client's number
 	 * 
@@ -54,7 +58,7 @@ public class ClientTCP implements AutoCloseable {
 	public int getNumClient() {
 		return this.numClient;
 	}
-	
+
 	/**
 	 * Getter for the client's IP
 	 * 
@@ -63,7 +67,7 @@ public class ClientTCP implements AutoCloseable {
 	public String getIP() {
 		return this.IP;
 	}
-	
+
 	/**
 	 * Getter for the client's IP
 	 * 
@@ -93,6 +97,8 @@ public class ClientTCP implements AutoCloseable {
 
 				System.out.println("Connected to the server !");
 				clientController.actualizeState("Connected");
+				
+				this.display2PlayersConnected();
 
 				/* Get Message of server */
 				while (isConnectedToServer && isClientOpened) {
@@ -104,7 +110,7 @@ public class ClientTCP implements AutoCloseable {
 			if (this.clientSocket == null) {
 				if (isClientOpened) {
 					System.err.println("Server not open !");
-					
+
 					reconnect();
 				}
 			} else {
@@ -175,7 +181,6 @@ public class ClientTCP implements AutoCloseable {
 
 			isConnectedToServer = false;
 
-
 		} catch (IOException IOE) {
 			System.err.println("Error disconnecting from the server: " + IOE.getMessage());
 		}
@@ -212,10 +217,16 @@ public class ClientTCP implements AutoCloseable {
 
 			// Message for client's number assignment
 			if (matcher.find()) {
-	            String integerPart = matcher.group(1); 
-	            numClient = Integer.parseInt(integerPart) - 1; 
-				
+				String integerPart = matcher.group(1);
+				numClient = Integer.parseInt(integerPart) - 1;
+				System.out.println("Le client a le numéro : " + numClient);
 			}
+			
+			if (finalMessage.equals("2 Players Connected")) {
+				System.out.println("Les deux joueurs sont connectés au serveur, la partie peut être lancé ! ");
+				is2ndClientConnected = true;
+			}
+
 		} catch (IOException IOE) {
 			IOE.printStackTrace();
 			disconnect();
@@ -251,14 +262,25 @@ public class ClientTCP implements AutoCloseable {
 		isReconnectedToServerInProgress = false;
 	}
 
-	/**
-	 * Method use to send numColumn to Server
-	 * 
-	 * @param Saisie_ID
-	 * @param round_hour
+	 /**
+	 * Method that allows to display if the two players are connected or not
 	 */
-	public void sendMessage(int numColumn) {
+	public void display2PlayersConnected() {
+	    Thread thread = new Thread(() -> {
+	        while (true) {
+	            try {
+	                Thread.sleep(500);
+	                Platform.runLater(() -> {
+	                	System.out.println(is2ndClientConnected);
+	                });
+	            } catch (InterruptedException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    });
 
+	    thread.setDaemon(true);
+	    thread.start();
 	}
 
 	/**
